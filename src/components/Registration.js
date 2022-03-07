@@ -3,7 +3,7 @@ import {Alert,Container,Form,Button,Spinner} from 'react-bootstrap'
 import { useState } from 'react'
 import { Link,useNavigate} from 'react-router-dom'
 import "../firebaseconfig"
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword,sendEmailVerification } from "firebase/auth";
 
 const Registration = () => {
     
@@ -22,6 +22,7 @@ const Registration = () => {
     let [errcpassword,setErrcpassword] = useState('')
     let [match,setMatch] = useState('')
     let [loading,setLoading] = useState(false)
+    let [samemail,setSamemail] = useState(false)
   
     let handleUsername = (e)=>{
       setUsername(e.target.value)
@@ -67,6 +68,10 @@ const Registration = () => {
               setCpassword('')  
               setErrcpassword('')  
               setMatch('')   
+              sendEmailVerification(auth.currentUser)
+              .then(() => {
+                console.log("email sent")
+              });
 
               setLoading(false)
               navigate("/login",{state:"account created successfully"});
@@ -74,8 +79,11 @@ const Registration = () => {
             .catch((error) => {
               const errorCode = error.code;
               const errorMessage = error.message;
-              console.log(error)
-              // ..
+              if(errorCode.includes("email")){
+                setSamemail("email already in use")
+                setLoading(false)
+              }
+              
             });
       }
     }
@@ -115,6 +123,7 @@ const Registration = () => {
             :
             ""
             }
+            
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="formBasicPassword">
@@ -149,19 +158,31 @@ const Registration = () => {
             :
             ""
             }
+            {samemail
+            ?
+            <Form.Text className="text-muted err">
+            {samemail}
+          </Form.Text>
+            :
+            ""
+            }
         </Form.Group>
 
-        <Button onClick={handleSubmit} className='w-100' variant="primary">
-            {loading
-            ?
-            <Spinner animation="border" role="status">
-              <span className="visually-hidden">Loading...</span>
-            </Spinner>
-            :
-            'Submit'
-            }
-
+        {loading
+        ?
+        <Button className='w-100' variant="primary">
+          <Spinner animation="border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
         </Button>
+        :
+        <Button onClick={handleSubmit} className='w-100' variant="primary">
+         submit
+        </Button>
+        }
+       
+
+        
         <Form.Text id="passwordHelpBlock" muted>
             Already have an account? <Link to="/login">Login</Link> or <Link to="/">guest</Link>
         </Form.Text>
