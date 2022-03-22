@@ -5,6 +5,7 @@ import '../firebaseconfig'
 import Left from './Left';
 import Right from './Right';
 import { getAuth, signOut,onAuthStateChanged } from "firebase/auth";
+import Middle from './Middle';
 
 
 
@@ -18,14 +19,16 @@ const Home = () => {
     let [msg,setMsg] = useState(true)
     let [varifymail,setVarifymail] = useState(false)
     let [time,setTime] = useState("")
-    let [name,setName] = useState("") 
+    let [name,setName] = useState("")  
+    let [id,setId] = useState("")  
     let [profilepicture,setProfilepicture] = useState("") 
     const auth = getAuth();
 
     onAuthStateChanged(auth, (user) => {
       if (user) {
+        setId(user.uid)
         setProfilepicture(user.photoURL)
-        setTime(user.metadata.createdAt)
+        setTime(user.metadata.creationTime)
         setName(user.displayName)
         if(user.emailVerified){
           setVarifymail(true)
@@ -69,9 +72,11 @@ const Home = () => {
 
       <Row>
         <Col lg={3}>
-          <Left username={name} img={profilepicture}/>
+          <Left username={name} img={profilepicture} id={id}/>
         </Col>
-        <Col lg={6}>midddle</Col>
+        <Col lg={6}>
+          <Middle/>
+        </Col>
         <Col lg={3}>
           <Right createtime={time}/>
         </Col>

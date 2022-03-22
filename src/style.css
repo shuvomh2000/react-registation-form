@@ -6,6 +6,12 @@
 .left{
     height: 100vh;
     background: #141414;
+    padding: 10px;
+}
+
+.middle{
+    background: yellow;
+    height: 85vh;
 }
 
 .right{

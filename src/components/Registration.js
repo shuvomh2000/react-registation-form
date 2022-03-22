@@ -60,11 +60,14 @@ const Registration = () => {
               console.log(user)
               updateProfile(auth.currentUser, {
                 displayName: username, photoURL: "https://e7.pngegg.com/pngimages/122/295/png-clipart-open-user-profile-facebook-free-content-facebook-silhouette-avatar-thumbnail.png"
+
               }).then(() => {
                 const db = getDatabase();
-                  set(ref(db, 'users/'+user.uid), {
+                  set(ref(db, 'users/'+user.user.uid), {
                     username: username,
-                    createdAt: Date()
+                    email: email,
+                    id: user.user.uid,
+                    img: user.user.photoURL 
                   }).then(()=>{
                       // Profile updated!
                       setUsername('')
