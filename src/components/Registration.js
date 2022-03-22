@@ -3,7 +3,8 @@ import {Alert,Container,Form,Button,Spinner} from 'react-bootstrap'
 import { useState } from 'react'
 import { Link,useNavigate} from 'react-router-dom'
 import "../firebaseconfig"
-import { getAuth, createUserWithEmailAndPassword,sendEmailVerification } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword,sendEmailVerification,updateProfile } from "firebase/auth";
+import { getDatabase, ref, set } from "firebase/database";
 
 const Registration = () => {
     
@@ -56,25 +57,33 @@ const Registration = () => {
           createUserWithEmailAndPassword(auth, email, password)
             .then((user) => {
               // Signed in 
-              
-              console.log(user.user)
-              // ...
-              setUsername('')
-              setErrusername('')
-              setEmail('')
-              setErremail('')  
-              setPassword('')  
-              setErrpassword('')  
-              setCpassword('')  
-              setErrcpassword('')  
-              setMatch('')   
-              sendEmailVerification(auth.currentUser)
-              .then(() => {
-                console.log("email sent")
+              console.log(user)
+              updateProfile(auth.currentUser, {
+                displayName: username, photoURL: "https://e7.pngegg.com/pngimages/122/295/png-clipart-open-user-profile-facebook-free-content-facebook-silhouette-avatar-thumbnail.png"
+              }).then(() => {
+                const db = getDatabase();
+                  set(ref(db, 'users/'+user.uid), {
+                    username: username,
+                    createdAt: Date()
+                  }).then(()=>{
+                      // Profile updated!
+                      setUsername('')
+                      setErrusername('')
+                      setEmail('')
+                      setErremail('')  
+                      setPassword('')  
+                      setErrpassword('')  
+                      setCpassword('')  
+                      setErrcpassword('')  
+                      setMatch('')   
+                      sendEmailVerification(auth.currentUser)
+                      setLoading(false)
+                      navigate("/login",{state:"account created successfully"});
+                  })
+              }).catch((error) => {
+                // An error occurred
+                // ...
               });
-
-              setLoading(false)
-              navigate("/login",{state:"account created successfully"});
             })
             .catch((error) => {
               const errorCode = error.code;
