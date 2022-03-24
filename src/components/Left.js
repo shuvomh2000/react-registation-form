@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import {useLocation ,useNavigate } from 'react-router-dom'
 import { DropdownButton,Dropdown,ButtonGroup,Button,ListGroup,Modal,ProgressBar,Form } from 'react-bootstrap'
 import { getAuth, signOut,onAuthStateChanged } from "firebase/auth";
-import { getDatabase, ref, onValue} from "firebase/database";
+import { getDatabase, ref, onValue,set} from "firebase/database";
 import { getStorage, ref as refer, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 
@@ -13,6 +13,7 @@ const Left = (props) => {
     let [users,setUsers] = useState([])
     let [activeuser,setActiveuser] = useState("")
     let [uploadfile,setUploadfile] = useState('')
+    let [profile,setProfile] = useState('')
     let [progress2,setProgress2] = useState(0)
     let [bar,setBar] = useState(false)
 
@@ -47,6 +48,8 @@ const Left = (props) => {
             snapshot.forEach(item=>{
                 if(props.id !== item.key){
                     userArr.push(item.val())
+                }else{
+                  setProfile(item.val().img)
                 }
                 
             })
@@ -87,6 +90,13 @@ const Left = (props) => {
             // For instance, get the download URL: https://firebasestorage.googleapis.com/...
             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
               console.log('File available at', downloadURL);
+              const db = getDatabase();
+              set(ref(db, 'users/'+auth.currentUser.uid), {
+                  username: props.username,
+                  id: props.id,
+                  email: props.email,
+                  img: downloadURL
+              });
             });
           }
         );
@@ -95,7 +105,7 @@ const Left = (props) => {
   return (
     <>
     <div className='left'>
-        <img className='w-25' src={props.img}/>
+        <img className='w-25' src={profilegit}/>
         <br/>
         <DropdownButton
             as={ButtonGroup}

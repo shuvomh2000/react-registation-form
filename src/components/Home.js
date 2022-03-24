@@ -21,11 +21,13 @@ const Home = () => {
     let [time,setTime] = useState("")
     let [name,setName] = useState("")  
     let [id,setId] = useState("")  
+    let [email,setEmail] = useState("")  
     let [profilepicture,setProfilepicture] = useState("") 
     const auth = getAuth();
 
     onAuthStateChanged(auth, (user) => {
       if (user) {
+        setEmail(user.email)
         setId(user.uid)
         setProfilepicture(user.photoURL)
         setTime(user.metadata.creationTime)
@@ -72,7 +74,7 @@ const Home = () => {
 
       <Row>
         <Col lg={3}>
-          <Left username={name} img={profilepicture} id={id}/>
+          <Left username={name} img={profilepicture} id={id} email={email}/>
         </Col>
         <Col lg={6}>
           <Middle/>
