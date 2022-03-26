@@ -2,10 +2,14 @@ import React, { useEffect, useState } from 'react'
 import { Form,Modal,Button,ProgressBar } from 'react-bootstrap'
 import { getDatabase, ref, set,onValue } from "firebase/database";
 import { getStorage, ref as refer, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { getAuth} from "firebase/auth";
+import { useSelector } from 'react-redux';
+
 
 
 const Middle = () => {
-
+    let auth =getAuth()
+    let userdata = useSelector(item=>item.activeuser.uid)
     let [msg,setMsg] = useState('')
     let [usermsg,setUsermsg] = useState('')
     let [uploadfile,setUploadfile] = useState('')

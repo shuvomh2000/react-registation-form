@@ -4,12 +4,13 @@ import { DropdownButton,Dropdown,ButtonGroup,Button,ListGroup,Modal,ProgressBar,
 import { getAuth, signOut,onAuthStateChanged } from "firebase/auth";
 import { getDatabase, ref, onValue,set} from "firebase/database";
 import { getStorage, ref as refer, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-
+import {useDispatch} from 'react-redux'
 
 
 
 
 const Left = (props) => {
+    let dispatch = useDispatch()
     let [users,setUsers] = useState([])
     let [activeuser,setActiveuser] = useState("")
     let [uploadfile,setUploadfile] = useState('')
@@ -37,6 +38,7 @@ const Left = (props) => {
 
       let handleActive = (id)=>{
         setActiveuser(id)
+        dispatch({type:"ACTIVE_USER",payload:id})
       }
 
       let userArr = []
@@ -105,7 +107,7 @@ const Left = (props) => {
   return (
     <>
     <div className='left'>
-        <img className='w-25' src={profilegit}/>
+        <img className='w-25' src={profile}/>
         <br/>
         <DropdownButton
             as={ButtonGroup}
