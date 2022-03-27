@@ -4,7 +4,7 @@ import { DropdownButton,Dropdown,ButtonGroup,Button,ListGroup,Modal,ProgressBar,
 import { getAuth, signOut,onAuthStateChanged } from "firebase/auth";
 import { getDatabase, ref, onValue,set} from "firebase/database";
 import { getStorage, ref as refer, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import {useDispatch} from 'react-redux'
+import {useDispatch} from 'react-redux';
 
 
 

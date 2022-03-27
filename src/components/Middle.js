@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { Form,Modal,Button,ProgressBar } from 'react-bootstrap'
-import { getDatabase, ref, set,onValue } from "firebase/database";
+import { Form,Modal,Button,ProgressBar,Card } from 'react-bootstrap'
+import { getDatabase, ref, set,onValue,push } from "firebase/database";
 import { getStorage, ref as refer, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { getAuth} from "firebase/auth";
 import { useSelector } from 'react-redux';
@@ -9,12 +9,13 @@ import { useSelector } from 'react-redux';
 
 const Middle = () => {
     let auth =getAuth()
-    let userdata = useSelector(item=>item.activeuser.uid)
+    let userdata = useSelector(item=>item.activeuser.id)
     let [msg,setMsg] = useState('')
-    let [usermsg,setUsermsg] = useState('')
+    let [usermsg,setUsermsg] = useState([])
     let [uploadfile,setUploadfile] = useState('')
     let [progress2,setProgress2] = useState(0)
     let [bar,setBar] = useState(false)
+    let [automsgsend,setAutomsgsend] = useState(false)
 
     const [show, setShow] = useState(false);
 
@@ -27,19 +28,27 @@ const Middle = () => {
 
     let handleSend = ()=>{
         const db = getDatabase();
-        set(ref(db, 'message/'), {
-            msg: msg
+        // console.log(userdata)
+        set(push(ref(db, 'messages/')), {
+            msg: msg,
+            receiver: userdata,
+            sender: auth.currentUser.uid
         });
+        setAutomsgsend(!automsgsend)
+        setMsg('')
     }
 
     useEffect (()=>{
         const db = getDatabase();
-        const starCountRef = ref(db, 'message/');
-        onValue(starCountRef, (snapshot) => {
-        const data = snapshot.val();
-        setUsermsg(data)
-        });
-    },[])
+        const userRef = ref(db, 'messages/');
+        onValue(userRef, (snapshot) => {
+        let msgarr = []
+        snapshot.forEach(item=>{
+          msgarr.push(item.val())
+        })
+        setUsermsg(msgarr)
+        })
+    },[automsgsend])
 
     let handleFilesend = (e)=>{
         setUploadfile (e.target.files[0])
@@ -81,9 +90,19 @@ const Middle = () => {
   return (
    <>
    <div className='middle'>
-    <h1>bdfb</h1>
+   {usermsg.map(item=>(
+    
+     <Card style={{ width: '18rem' }}>
+     <Card.Body>
+       <Card.Title>Name</Card.Title>
+       <Card.Text>
+         {item.msg}
+       </Card.Text>
+     </Card.Body>
+   </Card>
+   ))}
    </div>
-   <Form.Control onChange={handleMSg} type="text" placeholder="massage" />
+   <Form.Control onChange={handleMSg} type="text" placeholder="massage" value={msg} />
    <Button className='w-50' onClick={handleSend} >Send</Button>
    <Button className='w-50' variant="primary" onClick={handleShow}>File</Button>
 
