@@ -29,7 +29,7 @@ const Middle = () => {
             receiver: userdata,
             sender: auth.currentUser.uid
         });
-        const userRef = ref(db, 'messages/');
+        const userRef = ref(db, 'typing/');
         onValue(userRef, (snapshot) => {
         let typingarr = []
         snapshot.forEach(item=>{
@@ -118,7 +118,11 @@ const Middle = () => {
    ''
    ))}
    {Typing.map(item=>(
-    <h1>{item.name}</h1>
+     item.receiver == auth.currentUser.uid
+     ?
+    <h1>{item.name}...</h1>
+      :
+      ""
    ))}
 
    

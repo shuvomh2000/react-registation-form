@@ -147,7 +147,7 @@ const Left = (props) => {
               :
               item.sender == auth.currentUser.uid
               ?
-              <ListGroup.Item style={activeuser == item.id ? active:notactive} onClick={()=>handleActive(item.id)}>{item.username }</ListGroup.Item>
+              <ListGroup.Item style={activeuser == item.id ? active:notactive} onClick={()=>handleActive(item.receiver)}>{item.username }</ListGroup.Item>
               :
               ""
               }
