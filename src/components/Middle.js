@@ -7,7 +7,6 @@ import { useSelector } from 'react-redux';
 
 const Middle = () => {
     let auth =getAuth()
- 
     let userdata = useSelector(item=>item.activeuser.id)
     let [msg,setMsg] = useState('')
     let [usermsg,setUsermsg] = useState([])
@@ -35,6 +34,7 @@ const Middle = () => {
         setMsg('')
     }
 
+    let msgarr = []
     useEffect (()=>{
         const db = getDatabase();
         const userRef = ref(db, 'messages/');

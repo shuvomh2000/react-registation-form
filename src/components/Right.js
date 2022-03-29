@@ -46,6 +46,7 @@ const Right = (props) => {
       let handleSendReq = (id,name)=>{
         const db = getDatabase();
         set(ref(db, 'request/'+auth.currentUser.uid),{
+          ReqReceiver:name,
           username: auth.currentUser.displayName,
           receiver: id,
           sender: auth.currentUser.uid,
@@ -55,7 +56,8 @@ const Right = (props) => {
       let handleAcceptReq = (id,name)=>{
         const db = getDatabase();
         set(ref(db, 'friends/'+auth.currentUser.uid),{
-          username: name,
+          reqSenderName: name,
+          username: auth.currentUser.displayName,
           receiver: auth.currentUser.uid,
           sender: id,
         });

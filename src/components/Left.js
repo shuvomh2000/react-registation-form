@@ -42,22 +42,16 @@ const Left = (props) => {
       }
 
       let userArr = []
-
       useEffect(()=>{
         const db = getDatabase();
-        const userRef = ref(db, 'users/');
+        const userRef = ref(db, 'friends/');
         onValue(userRef, (snapshot) => {
             snapshot.forEach(item=>{
-                if(props.id !== item.key){
                     userArr.push(item.val())
-                }else{
-                  setProfile(item.val().img)
-                }
-                
             })
             setUsers(userArr)
         });
-      },[props.id])
+      },[])
 
       let handleImageSelect = (e)=>{
         setUploadfile (e.target.files[0])
@@ -147,7 +141,16 @@ const Left = (props) => {
 
         {users.map(item=>(
             <ListGroup>
-                <ListGroup.Item style={activeuser == item.id ? active:notactive} onClick={()=>handleActive(item.id)}>{item.username }</ListGroup.Item>
+              {item.receiver == auth.currentUser.uid
+              ?
+              <ListGroup.Item style={activeuser == item.id ? active:notactive} onClick={()=>handleActive(item.id)}>{item.reqSenderName}</ListGroup.Item>
+              :
+              item.sender == auth.currentUser.uid
+              ?
+              <ListGroup.Item style={activeuser == item.id ? active:notactive} onClick={()=>handleActive(item.id)}>{item.username }</ListGroup.Item>
+              :
+              ""
+              }
             </ListGroup>
         ))}
     </div>
