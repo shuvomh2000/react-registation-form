@@ -143,7 +143,7 @@ const Left = (props) => {
               </Button>
             </Modal.Footer>
         </Modal>
-        <h3>peoples</h3>
+        <h3 className='heading'>Friends</h3>
 
         {users.map(item=>(
             <ListGroup>

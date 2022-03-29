@@ -5,10 +5,9 @@ import { getStorage, ref as refer, uploadBytesResumable, getDownloadURL } from "
 import { getAuth} from "firebase/auth";
 import { useSelector } from 'react-redux';
 
-
-
 const Middle = () => {
     let auth =getAuth()
+ 
     let userdata = useSelector(item=>item.activeuser.id)
     let [msg,setMsg] = useState('')
     let [usermsg,setUsermsg] = useState([])
@@ -16,12 +15,9 @@ const Middle = () => {
     let [progress2,setProgress2] = useState(0)
     let [bar,setBar] = useState(false)
     let [automsgsend,setAutomsgsend] = useState(false)
-
     const [show, setShow] = useState(false);
-
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-
     let handleMSg = (e)=>{
         setMsg(e.target.value)
     }
@@ -31,10 +27,11 @@ const Middle = () => {
         // console.log(userdata)
         set(push(ref(db, 'messages/')), {
             msg: msg,
+            name: auth.currentUser.displayName,
             receiver: userdata,
             sender: auth.currentUser.uid
         });
-        setAutomsgsend(!automsgsend)
+        setAutomsgsend(!automsgsend)  
         setMsg('')
     }
 
@@ -48,7 +45,7 @@ const Middle = () => {
         })
         setUsermsg(msgarr)
         })
-    },[automsgsend])
+    },[userdata])
 
     let handleFilesend = (e)=>{
         setUploadfile (e.target.files[0])
@@ -91,15 +88,17 @@ const Middle = () => {
    <>
    <div className='middle'>
    {usermsg.map(item=>(
-    
-     <Card style={{ width: '18rem' }}>
+    item.receiver == userdata || item.sender == userdata ?
+     <Card style={item.sender == auth.currentUser.uid?receiver:sender}>
      <Card.Body>
-       <Card.Title>Name</Card.Title>
+       <Card.Title>{item.name}</Card.Title>
        <Card.Text>
          {item.msg}
        </Card.Text>
      </Card.Body>
    </Card>
+   :
+   ''
    ))}
    </div>
    <Form.Control onChange={handleMSg} type="text" placeholder="massage" value={msg} />
@@ -125,6 +124,16 @@ const Middle = () => {
       </Modal>
    </>
   )
+}
+
+let sender = {
+  width: "300px",
+  marginRight: "auto",
+}
+
+let receiver = {
+  width: "300px",
+  marginLeft: "auto"
 }
 
 export default Middle
