@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import {useLocation ,useNavigate } from 'react-router-dom'
 import { DropdownButton,Dropdown,ButtonGroup,Button,ListGroup,Modal,ProgressBar,Form } from 'react-bootstrap'
-import { getAuth, signOut,onAuthStateChanged } from "firebase/auth";
+import { getAuth, signOut } from "firebase/auth";
 import { getDatabase, ref, onValue,set} from "firebase/database";
 import { getStorage, ref as refer, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import {useDispatch} from 'react-redux';
@@ -143,7 +143,7 @@ const Left = (props) => {
             <ListGroup>
               {item.receiver == auth.currentUser.uid
               ?
-              <ListGroup.Item style={activeuser == item.id ? active:notactive} onClick={()=>handleActive(item.id)}>{item.reqSenderName}</ListGroup.Item>
+              <ListGroup.Item style={activeuser == item.sender ? active:notactive} onClick={()=>handleActive(item.sender)}>{item.reqSenderName}</ListGroup.Item>
               :
               item.sender == auth.currentUser.uid
               ?

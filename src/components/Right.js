@@ -1,7 +1,7 @@
 import React,{useState,useEffect} from 'react'
 import { ListGroup,Button } from 'react-bootstrap'
 import { getAuth} from "firebase/auth";
-import { getDatabase, ref, onValue,set} from "firebase/database";
+import { getDatabase, ref, onValue,set,remove} from "firebase/database";
 
 
 import moment from 'moment'
@@ -61,6 +61,7 @@ const Right = (props) => {
           receiver: auth.currentUser.uid,
           sender: id,
         });
+        remove(ref(db, 'request/'+id))
       }
   return (
     <>

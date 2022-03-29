@@ -7,8 +7,10 @@ import { useSelector } from 'react-redux';
 
 const Middle = () => {
     let auth =getAuth()
+ 
     let userdata = useSelector(item=>item.activeuser.id)
     let [msg,setMsg] = useState('')
+    let [Typing,settyping] = useState([])
     let [usermsg,setUsermsg] = useState([])
     let [uploadfile,setUploadfile] = useState('')
     let [progress2,setProgress2] = useState(0)
@@ -17,13 +19,28 @@ const Middle = () => {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+
+
     let handleMSg = (e)=>{
         setMsg(e.target.value)
+        const db = getDatabase();
+        set(ref(db, 'typing/'+auth.currentUser.uid), {
+            name: auth.currentUser.displayName,
+            receiver: userdata,
+            sender: auth.currentUser.uid
+        });
+        const userRef = ref(db, 'messages/');
+        onValue(userRef, (snapshot) => {
+        let typingarr = []
+        snapshot.forEach(item=>{
+          typingarr.push(item.val())
+        })
+        settyping(typingarr)
+        })
     }
 
     let handleSend = ()=>{
-        const db = getDatabase();
-        // console.log(userdata)
+        const db = getDatabase()
         set(push(ref(db, 'messages/')), {
             msg: msg,
             name: auth.currentUser.displayName,
@@ -34,7 +51,7 @@ const Middle = () => {
         setMsg('')
     }
 
-    let msgarr = []
+
     useEffect (()=>{
         const db = getDatabase();
         const userRef = ref(db, 'messages/');
@@ -100,7 +117,14 @@ const Middle = () => {
    :
    ''
    ))}
+   {Typing.map(item=>(
+    <h1>{item.name}</h1>
+   ))}
+
+   
+
    </div>
+
    <Form.Control onChange={handleMSg} type="text" placeholder="massage" value={msg} />
    <Button className='w-50' onClick={handleSend} >Send</Button>
    <Button className='w-50' variant="primary" onClick={handleShow}>File</Button>

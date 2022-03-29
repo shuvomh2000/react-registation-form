@@ -80,7 +80,7 @@ const Home = () => {
           <Middle/>
         </Col>
         <Col lg={3}>
-          <Right createtime={time}/>
+          <Right createtime={time} id={id}/>
         </Col>
       </Row>
 
