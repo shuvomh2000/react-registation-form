@@ -35,6 +35,7 @@ const Login = () => {
       setPassword(e.target.value)
     }
   
+    
   
     let handleSubmit = (e)=>{
       e.preventDefault()
@@ -69,7 +70,7 @@ const Login = () => {
       }
     }
     const notify = () => toast(state);
-    const notify2 = () => toast("Reset mail to your email");
+    const notify2 = () => toast("Reset password to your email");
     
     if(msg){
       if(state){
@@ -176,7 +177,7 @@ const Login = () => {
           <Modal.Body>
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>Email address</Form.Label>
-            <Form.Control onChange={handleResetemail} type="email" placeholder="Enter email" />
+            <Form.Control onChange={handleResetemail} type="email" placeholder="Enter email"/>
             {errresetemail
             ?
             <Form.Text className="text-muted err">

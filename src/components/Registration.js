@@ -59,7 +59,8 @@ const Registration = () => {
               // Signed in 
               console.log(user)
               updateProfile(auth.currentUser, {
-                displayName: username, photoURL: "https://e7.pngegg.com/pngimages/122/295/png-clipart-open-user-profile-facebook-free-content-facebook-silhouette-avatar-thumbnail.png"
+                displayName: username, 
+                photoURL: "https://e7.pngegg.com/pngimages/122/295/png-clipart-open-user-profile-facebook-free-content-facebook-silhouette-avatar-thumbnail.png"
 
               }).then(() => {
                 const db = getDatabase();
@@ -84,8 +85,7 @@ const Registration = () => {
                       navigate("/login",{state:"account created successfully"});
                   })
               }).catch((error) => {
-                // An error occurred
-                // ...
+                console.log(error)
               });
             })
             .catch((error) => {
@@ -192,9 +192,6 @@ const Registration = () => {
          submit
         </Button>
         }
-       
-
-        
         <Form.Text id="passwordHelpBlock" muted>
             Already have an account? <Link to="/login">Login</Link> or <Link to="/">guest</Link>
         </Form.Text>

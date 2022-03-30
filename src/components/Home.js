@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import {Alert,Container,Button,Row,Col} from 'react-bootstrap'
+import {Row,Col} from 'react-bootstrap'
 import {useLocation ,useNavigate } from 'react-router-dom'
 import '../firebaseconfig'
 import Left from './Left';
@@ -39,7 +39,7 @@ const Home = () => {
         console.log("mail verify na")
         navigate("/login")
       }
-    });
+    })
 
     let handleLogout = ()=>{
       
